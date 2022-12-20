@@ -7,12 +7,13 @@ from django.shortcuts import render, redirect
 from .forms import SignUpForm
 from django.contrib import messages
 import datetime,pytz
-
+from better_profanity import profanity
 from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import subjectivity
 from nltk.sentiment import SentimentAnalyzer
 from nltk.sentiment.util import *
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
 
 import nltk
 nltk.download('subjectivity')
@@ -105,6 +106,7 @@ def sendMessage(request, rec):
     if request.user.is_authenticated:
         mk = "-".join(sorted([request.user.username,rec]))
         message = request.POST['message'].strip()
+        x=profanity.censor(message)
         if len(message)>0:
             Datetime = str(datetime.datetime.now(IST))[:-13]
             ss = sia.polarity_scores(message)
@@ -114,9 +116,10 @@ def sendMessage(request, rec):
                 "Sender": request.user.username,
                 "Receiver": rec,
                 "dateTime": Datetime,
-                "Message": message,
+                "Message": x,
                 "sus": ss["neg"]
             }
+            
             db.child("Chats").child(mk).push(msg)
             return HttpResponse("Message Sent to "+rec);
     else:

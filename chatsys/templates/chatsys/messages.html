@@ -1,9 +1,9 @@
-<div class="chats">
+<div class="chats" >
     {% if Chats %}
         {% for c,s in Chats %}
-            <div class="row">
+            <div class="row" >
             {% if s %}
-            <div class="col"></div>
+            <div class="col" ></div>
             {% endif %}
             <div class="col-auto">
                     {% for k,v in c.items %}
@@ -11,7 +11,7 @@
                             {% if s %}
                                 <p class="msg sent">
                             {% else %}
-                                <p class="msg rcvd">
+                                <p class="msg rcvd ">
                             {% endif %}
                                     {{v}}
                                 </p>
